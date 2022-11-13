@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({
     extended:true
 }));
 
-mongoose.connect("mongodb://localhost:27017//userDB",{useNewUrlParser:true});
+mongoose.connect("mongodb+srv://simran1002:Simran10@cluster0.lapfqtf.mongodb.net/?retryWrites=true&w=majority",{useNewUrlParser:true});
 
 const userSchema = {
     email:String,
@@ -33,6 +33,48 @@ app.get("/register",function(req,res){
     res.render("register");
 });
 
+app.post("/register",function(req,res){
+    const newUser = new User({
+        email: req.body.username,
+        password: req.body.password
+    });
+
+    newUser.save(function(err){
+        if (err) {
+            console.log(err);
+        } else{
+            res.render("secrets");
+        }
+    });  
+});
+
+app.post("/login", function(req,res){
+    const username = req.body.username;
+    const password = req.body.password;
+
+    User.findOne({email: username}, function(err, foundUser){
+        if (err) {
+            console.log(err);
+        } else {
+            if ( founderUser) {
+                if (foundUser.password === password){
+                    res.render("secrets");
+                }
+            }
+        }
+    });
+})
 app.listen(8000,function(){
     console.log("server is up");
 });
+
+
+
+
+
+
+
+
+
+
+
